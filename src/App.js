@@ -1,24 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Suspense, useState} from 'react';
 import './App.css';
+import ErrorBoundary from './error'
+import Loading from './loading'
+const Form = React.lazy(()=>import('./form')) 
+const Comments =  React.lazy(()=>import('./comments'))
+
 
 function App() {
+
+const [data, setData]  = useState([])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='app'>
+      <h1>Welcome To My Lazy Blog!</h1>
+      <h3>What do you think about cats? Tell me in the comments.</h3>
+      <img alt='cat' src="https://www.purina.co.il/sites/site.prod1.purina.co.il/files/styles/slider_mobile/public/2019-11/Maine%20Coon%20Cat_526X360.jpg?itok=sdZmA53C" width='400px' height='200px'></img>
+      <ErrorBoundary>
+        <Suspense fallback={<Loading/>}>
+          <Form setData={setData}/>
+          <Comments data={data}/>
+      </Suspense>
+     </ErrorBoundary>
     </div>
   );
 }
